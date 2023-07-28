@@ -16,6 +16,7 @@ struct ContentView: View {
         VStack {
             HStack {
                 Text("Bundle ID")
+                    .frame(width: 100)
                 
                 TextField(text: $bundleID) {
                     Text("example) com.company.myapp")
@@ -24,21 +25,21 @@ struct ContentView: View {
             
             HStack {
                 Text("Title")
+                    .frame(width: 100)
                 
                 TextField(text: $title) {
                     Text("Push Notification Title")
                 }
             }
-            .frame(width: 100)
 
             HStack {
                 Text("Message")
+                    .frame(width: 100)
                 
                 TextField(text: $message) {
                     Text("Push Notification Body")
                 }
             }
-            .frame(width: 100)
             
             TextEditor(text: $customPayload)
             
