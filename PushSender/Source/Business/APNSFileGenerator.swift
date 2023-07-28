@@ -2,8 +2,6 @@
 //  APNSFileGenerator.swift
 //  PushSender
 //
-//  Created by 박종상님/iOS클라이언트개발팀 on 2023/07/28.
-//
 
 import Foundation
 
@@ -37,9 +35,9 @@ final class APNSFileGenerator {
         do {
             // 파일에 데이터 작성
             try resultJsonString.write(to: fileURL, atomically: true, encoding: .utf8)
-            print("[✅] 텍스트 파일이 생성되었습니다. 파일 경로: \(fileURL.path)")
+            print("[✅] Success. FilePath -> \(fileURL.path)")
         } catch {
-            print("[❌] 파일 생성에 실패하였습니다. 오류: \(error)")
+            print("[❌] Failed -> \(error)")
         }
     }
 }
