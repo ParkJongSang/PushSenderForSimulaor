@@ -24,7 +24,6 @@ final class SimulatorUseCase {
         let result = CommandLineExecuter.command("xcrun simctl push \(simulatorId) \(bundleId) \(directoryURL.path())test.apns")
         
         if result.isEmpty == false {
-            print("[👨‍🔧] command: xcrun simctl push \(simulatorId) \(bundleId) \(directoryURL.path())/test.apns")
             print("[👨‍🔧] \(result)")
         }
     }

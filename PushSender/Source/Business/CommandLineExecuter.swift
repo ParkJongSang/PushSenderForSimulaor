@@ -20,6 +20,8 @@ final class CommandLineExecuter {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)!
         
+        print("[👨‍🔧] \(command)")
+        
         return output
     }
 }

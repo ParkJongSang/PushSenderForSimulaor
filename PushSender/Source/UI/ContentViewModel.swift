@@ -5,6 +5,10 @@
 
 import Foundation
 
+enum SimulatorFetchError: Error {
+    case empty
+}
+
 final class ContentViewModel: ObservableObject {
     @Published var simulators: [SimulatorModel] = []
     @Published var selectedSimulator: SimulatorModel?
@@ -12,7 +16,7 @@ final class ContentViewModel: ObservableObject {
     private let simulatorUseCase = SimulatorUseCase()
     
     func fetchBootedSimulators() {
-        simulators = simulatorUseCase.fetchBooted()
+        self.simulators = simulatorUseCase.fetchBooted()
     }
     
     func selectSimulator(_ model: SimulatorModel) {
@@ -28,5 +32,21 @@ final class ContentViewModel: ObservableObject {
             body: message,
             customPayload: payload
         )
+    }
+    
+    func sendAll(title: String, message: String, bundleId: String, payload: String?) {
+        if simulators.isEmpty {
+            simulators = simulatorUseCase.fetchBooted()
+        }
+        
+        simulators.forEach {
+            simulatorUseCase.sendPush(
+                simulatorId: $0.id,
+                bundleId: bundleId,
+                title: title,
+                body: message,
+                customPayload: payload
+            )
+        }
     }
 }

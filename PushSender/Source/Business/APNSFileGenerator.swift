@@ -17,15 +17,15 @@ final class APNSFileGenerator {
             },
         },
         """
-        if let payload = customPayload {
-            jsonString += payload
+        if let payload = customPayload?.trimmingCharacters(in: .whitespaces) {
+            jsonString += payload.dropLast().dropFirst()
         }
         
         // 파일이 저장될 디렉토리 경로와 파일 이름 결정
         let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let fileURL = directoryURL.appendingPathComponent("test.apns")
         
-        var resultJsonString: String =
+        let resultJsonString: String =
         """
         {
             \(jsonString)

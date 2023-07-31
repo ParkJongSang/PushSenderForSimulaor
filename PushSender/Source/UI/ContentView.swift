@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var title: String = ""
     @State private var message: String = ""
     @State private var customPayload: String = ""
+    @State private var isShowEmptyText: Bool = false
     
     var body: some View {
         VStack {
@@ -41,7 +42,14 @@ struct ContentView: View {
                 }
             }
             
-            TextEditor(text: $customPayload)
+            HStack {
+                Text("Payload\n(Optional)")
+                    .multilineTextAlignment(.center)
+                    .frame(width: 100)
+                
+                TextEditor(text: $customPayload)
+            }
+            
             
             Menu(viewModel.selectedSimulator?.modelName ?? "Simulator") {
                 ForEach(viewModel.simulators) { simulator in
@@ -52,22 +60,46 @@ struct ContentView: View {
                     }
                 }
             }
-            
-            Button {
-                viewModel.sendPush(
-                    title: title,
-                    message: message,
-                    bundleId: bundleID,
-                    payload: customPayload
-                )
-            } label: {
-                Text("Send")
+            .onTapGesture {
+                viewModel.fetchBootedSimulators()
             }
-            .disabled(viewModel.selectedSimulator == nil)
+            
+            if isShowEmptyText {
+                Text("Cannot find booted simulators.")
+                    .font(.title3)
+                    .foregroundColor(.red)
+            }
+            
+            HStack {
+                Button {
+                    viewModel.sendPush(
+                        title: title,
+                        message: message,
+                        bundleId: bundleID,
+                        payload: customPayload
+                    )
+                } label: {
+                    Text("Send to \(viewModel.selectedSimulator?.modelName ?? "")")
+                }
+                .disabled(viewModel.selectedSimulator == nil)
+                .frame(maxWidth: .infinity)
+                
+                Button {
+                    viewModel.sendAll(
+                        title: title,
+                        message: message,
+                        bundleId: bundleID,
+                        payload: customPayload
+                    )
+                } label: {
+                    Text("Send to all booted Simulator")
+                }
+                .frame(maxWidth: .infinity)
+            }
         }
         .padding()
-        .onAppear {
-            viewModel.fetchBootedSimulators()
+        .onReceive(viewModel.$simulators) { simulators in
+            isShowEmptyText = simulators.isEmpty
         }
     }
 }
